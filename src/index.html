@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI面试助手</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI面试助手</h1>
+            <p>上传您的简历，获得个性化的面试准备体验</p>
+        </header>
+
+        <main>
+            <section id="upload-section" class="card">
+                <h2>上传简历</h2>
+                <form id="resume-upload-form">
+                    <div class="form-group">
+                        <label for="resume-file">选择PDF或DOCX格式的简历文件:</label>
+                        <input type="file" id="resume-file" accept=".pdf,.docx" required>
+                    </div>
+                    <button type="submit" id="upload-btn">上传并分析</button>
+                </form>
+                <div id="upload-status"></div>
+            </section>
+
+            <section id="analysis-section" class="card hidden">
+                <h2>简历分析结果</h2>
+                <div id="analysis-results"></div>
+            </section>
+
+            <section id="chat-section" class="card hidden">
+                <h2>AI面试对话</h2>
+                <div id="chat-history"></div>
+                <form id="chat-form">
+                    <div class="form-group">
+                        <input type="text" id="user-input" placeholder="输入您的问题..." required>
+                        <button type="submit">发送</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

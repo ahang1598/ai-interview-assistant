@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "frontend": "node index.js",
+    "backend": "cd backend/app && uvicorn main:app --reload",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "test": "jest"
   },
   "repository": {
@@ -25,5 +28,8 @@
   "homepage": "https://github.com/yourusername/ai-interview-assistant#readme",
   "devDependencies": {
     "jest": "^29.0.0"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
   }
 }

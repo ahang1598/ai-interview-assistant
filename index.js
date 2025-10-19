@@ -1,26 +1,27 @@
 /**
- * AI Interview Assistant
+ * AI Interview Assistant - Frontend Server
  * 
- * A tool to help with technical interview preparation using AI
+ * A tool to serve the frontend files for AI interview preparation
  */
 
-console.log('Welcome to AI Interview Assistant!');
+const express = require('express');
+const path = require('path');
 
-// TODO: 实现主要功能
-function main() {
-  console.log('Starting AI Interview Assistant...');
-  
-  // 主程序逻辑将在这里实现
-  // 这里只是占位符
-  
-  console.log('AI Interview Assistant is ready.');
-}
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-// 如果直接运行此文件，则执行main函数
-if (require.main === module) {
-  main();
-}
+// 获取正确的根目录路径
+const rootPath = process.env.NODE_PATH || path.resolve(__dirname);
 
-module.exports = {
-  main
-};
+// Serve static files from the 'src' directory
+app.use(express.static(path.join(rootPath, 'src')));
+
+// Serve index.html for the root route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(rootPath, 'src', 'index.html'));
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`AI Interview Assistant frontend server listening at http://localhost:${PORT}`);
+});
