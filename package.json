@@ -1,0 +1,29 @@
+{
+  "name": "ai-interview-assistant",
+  "version": "1.0.0",
+  "description": "AI Interview Assistant - An AI-powered tool to help with technical interview preparation",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/ai-interview-assistant.git"
+  },
+  "keywords": [
+    "ai",
+    "interview",
+    "assistant",
+    "interview-preparation"
+  ],
+  "author": "ahang <hciezpc@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/ai-interview-assistant/issues"
+  },
+  "homepage": "https://github.com/yourusername/ai-interview-assistant#readme",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
