@@ -9,3 +9,13 @@ pydantic==1.10.13
 PyPDF2==3.0.1
 python-docx==0.8.11
 python-multipart==0.0.6
+# 向量数据库相关依赖
+chromadb==0.4.22
+sentence-transformers==2.2.2
+# 用户认证相关依赖
+sqlalchemy==2.0.23
+python-jose==3.3.0
+passlib==1.7.4
+bcrypt==4.0.1
+# MySQL数据库依赖
+pymysql==1.0.2

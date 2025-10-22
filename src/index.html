@@ -11,10 +11,20 @@
         <header>
             <h1>AI面试助手</h1>
             <p>上传您的简历，获得个性化的面试准备体验</p>
+            <div id="user-info" class="user-info hidden">
+                <span id="username"></span>
+                <button id="logout-btn">退出</button>
+            </div>
         </header>
 
         <main>
-            <section id="upload-section" class="card">
+            <section id="auth-required" class="card">
+                <h2>请先登录</h2>
+                <p>您需要登录后才能使用AI面试助手功能。</p>
+                <button id="login-link" class="submit-btn">前往登录</button>
+            </section>
+
+            <section id="upload-section" class="card hidden">
                 <h2>上传简历</h2>
                 <form id="resume-upload-form">
                     <div class="form-group">

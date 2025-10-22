@@ -57,16 +57,16 @@ class LangChainIntegration:
         experience = resume_data.get("experience_years", "未知")
         
         # 创建链
-        chain = prompt | self.llm
+        chain = LLMChain(llm=self.llm, prompt=prompt)
         
         # 生成问题
-        response = chain.invoke({
+        response = chain.run({
             "name": name,
             "skills": skills,
             "experience": experience
         })
         
-        return response.content
+        return response
     
     def evaluate_answer(self, question: str, answer: str, resume_data: Dict[str, Any]) -> str:
         """
@@ -91,15 +91,15 @@ class LangChainIntegration:
         
         skills = ", ".join(resume_data.get("skills", []))
         
-        chain = prompt | self.llm
+        chain = LLMChain(llm=self.llm, prompt=prompt)
         
-        response = chain.invoke({
+        response = chain.run({
             "question": question,
             "answer": answer,
             "skills": skills
         })
         
-        return response.content
+        return response
     
     def chat_completion(self, messages: List[Dict[str, str]], resume_data: Dict[str, Any] = None) -> str:
         """
@@ -116,4 +116,8 @@ class LangChainIntegration:
         
         # 获取响应
         response = self.llm.invoke(langchain_messages)
-        return response.content
+        # 检查response是否为字符串，如果是则直接返回，否则返回content属性
+        if isinstance(response, str):
+            return response
+        else:
+            return response.content

@@ -2,11 +2,17 @@
 const API_BASE_URL = 'http://localhost:8000';
 
 // DOM元素
+const authRequiredSection = document.getElementById('auth-required');
+const uploadSection = document.getElementById('upload-section');
+const analysisSection = document.getElementById('analysis-section');
+const chatSection = document.getElementById('chat-section');
+const userInfo = document.getElementById('user-info');
+const usernameSpan = document.getElementById('username');
+const logoutBtn = document.getElementById('logout-btn');
+const loginLink = document.getElementById('login-link');
 const resumeUploadForm = document.getElementById('resume-upload-form');
 const uploadStatus = document.getElementById('upload-status');
-const analysisSection = document.getElementById('analysis-section');
 const analysisResults = document.getElementById('analysis-results');
-const chatSection = document.getElementById('chat-section');
 const chatHistory = document.getElementById('chat-history');
 const chatForm = document.getElementById('chat-form');
 const userInput = document.getElementById('user-input');
@@ -14,15 +20,61 @@ const userInput = document.getElementById('user-input');
 // 简历数据
 let resumeData = null;
 
+// 检查用户是否已登录
+checkAuthStatus();
+
 // 事件监听器
+loginLink.addEventListener('click', () => {
+    window.location.href = 'auth.html';
+});
+
+logoutBtn.addEventListener('click', handleLogout);
 resumeUploadForm.addEventListener('submit', handleResumeUpload);
 chatForm.addEventListener('submit', handleChatSubmit);
+
+/**
+ * 检查用户认证状态
+ */
+function checkAuthStatus() {
+    const token = localStorage.getItem('access_token');
+    const username = localStorage.getItem('username');
+    
+    if (token && username) {
+        // 用户已登录
+        authRequiredSection.classList.add('hidden');
+        uploadSection.classList.remove('hidden');
+        usernameSpan.textContent = username;
+        userInfo.classList.remove('hidden');
+    } else {
+        // 用户未登录
+        authRequiredSection.classList.remove('hidden');
+        uploadSection.classList.add('hidden');
+        userInfo.classList.add('hidden');
+    }
+}
+
+/**
+ * 处理用户退出
+ */
+function handleLogout() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('username');
+    checkAuthStatus();
+    // 清空聊天历史
+    chatHistory.innerHTML = '';
+}
 
 /**
  * 处理简历上传
  */
 async function handleResumeUpload(event) {
     event.preventDefault();
+    
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+        showUploadStatus('请先登录', 'error');
+        return;
+    }
     
     const fileInput = document.getElementById('resume-file');
     const file = fileInput.files[0];
@@ -50,8 +102,25 @@ async function handleResumeUpload(event) {
         // 发送请求到后端
         const response = await fetch(`${API_BASE_URL}/resume/parse`, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
+        
+        // 同时将简历添加到用户个人知识库
+        const knowledgeResponse = await fetch(`${API_BASE_URL}/knowledge/user/documents/add_from_resume`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        const knowledgeResult = await knowledgeResponse.json();
+        if (!knowledgeResponse.ok) {
+            console.error('添加到知识库失败:', knowledgeResult.detail);
+        }
         
         const result = await response.json();
         
@@ -68,7 +137,14 @@ async function handleResumeUpload(event) {
             // 显示成功状态
             showUploadStatus('简历上传和分析成功!', 'success');
         } else {
-            showUploadStatus(`错误: ${result.detail}`, 'error');
+            if (response.status === 401) {
+                showUploadStatus('认证已过期，请重新登录', 'error');
+                setTimeout(() => {
+                    handleLogout();
+                }, 1500);
+            } else {
+                showUploadStatus(`错误: ${result.detail}`, 'error');
+            }
         }
     } catch (error) {
         console.error('上传错误:', error);
@@ -156,6 +232,12 @@ function displayAnalysisResults(data) {
 async function handleChatSubmit(event) {
     event.preventDefault();
     
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+        addMessageToChat('assistant', '请先登录');
+        return;
+    }
+    
     const message = userInput.value.trim();
     if (!message) return;
     
@@ -181,11 +263,33 @@ async function handleChatSubmit(event) {
             resume_data: resumeData
         };
         
+        // 同时将对话内容添加到用户个人知识库
+        try {
+            const knowledgeResponse = await fetch(`${API_BASE_URL}/knowledge/user/documents/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    documents: [message]
+                })
+            });
+            
+            if (!knowledgeResponse.ok) {
+                const knowledgeResult = await knowledgeResponse.json();
+                console.error('添加到知识库失败:', knowledgeResult.detail);
+            }
+        } catch (knowledgeError) {
+            console.error('添加到知识库时出错:', knowledgeError);
+        }
+        
         // 发送请求到后端
         const response = await fetch(`${API_BASE_URL}/chat/completion`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(requestData)
         });
@@ -196,7 +300,14 @@ async function handleChatSubmit(event) {
             // 添加AI回复到聊天历史
             addMessageToChat('assistant', result.message.content);
         } else {
-            addMessageToChat('assistant', `错误: ${result.detail}`);
+            if (response.status === 401) {
+                addMessageToChat('assistant', '认证已过期，请重新登录');
+                setTimeout(() => {
+                    handleLogout();
+                }, 1500);
+            } else {
+                addMessageToChat('assistant', `错误: ${result.detail}`);
+            }
         }
     } catch (error) {
         console.error('聊天错误:', error);

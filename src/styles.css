@@ -1,57 +1,81 @@
 /* 全局样式 */
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f5f7fa;
+    background-color: #f4f4f4;
 }
 
 .container {
+    width: 90%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* 头部样式 */
 header {
     text-align: center;
     margin-bottom: 30px;
     padding: 20px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+    position: relative;
 }
 
 header h1 {
     font-size: 2.5rem;
-    color: #2c3e50;
     margin-bottom: 10px;
 }
 
-header p {
-    font-size: 1.2rem;
-    color: #7f8c8d;
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* 卡片样式 */
+.user-info #username {
+    font-weight: bold;
+}
+
+.user-info #logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.user-info #logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
 .card {
     background: white;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
     margin-bottom: 30px;
 }
 
 .card h2 {
-    color: #2c3e50;
     margin-bottom: 20px;
-    font-size: 1.8rem;
+    color: #333;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 10px;
 }
 
-/* 表单样式 */
 .form-group {
     margin-bottom: 20px;
 }
@@ -59,10 +83,16 @@ header p {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 600;
+    font-weight: bold;
 }
 
-.form-group input[type="file"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
 .form-group input[type="text"] {
     width: 100%;
     padding: 12px;
@@ -71,54 +101,61 @@ header p {
     font-size: 1rem;
 }
 
-.form-group input[type="text"] {
-    padding: 12px 15px;
-}
-
 button {
-    background-color: #3498db;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+    padding: 12px 24px;
     border: none;
-    padding: 12px 25px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #2980b9;
+    transform: translateY(-2px);
 }
 
-/* 上传状态样式 */
-#upload-status {
-    margin-top: 15px;
+button:active {
+    transform: translateY(0);
+}
+
+#upload-btn, #chat-form button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.status {
     padding: 10px;
     border-radius: 5px;
+    margin-top: 10px;
 }
 
-#upload-status.success {
+.status.success {
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
 }
 
-#upload-status.error {
+.status.error {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
 
-/* 分析结果样式 */
-#analysis-results {
-    margin-top: 20px;
+.status.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.analysis-section {
+    margin-bottom: 20px;
 }
 
 .skill-tag {
     display: inline-block;
-    background-color: #e1f0fa;
-    color: #3498db;
+    background: #667eea;
+    color: white;
     padding: 5px 10px;
     border-radius: 20px;
     margin-right: 10px;
@@ -126,17 +163,6 @@ button:hover {
     font-size: 0.9rem;
 }
 
-.analysis-section {
-    margin-bottom: 20px;
-}
-
-.analysis-section h3 {
-    color: #2c3e50;
-    margin-bottom: 10px;
-    font-size: 1.3rem;
-}
-
-/* 聊天样式 */
 #chat-history {
     height: 400px;
     overflow-y: auto;
@@ -144,7 +170,7 @@ button:hover {
     border-radius: 5px;
     padding: 15px;
     margin-bottom: 20px;
-    background-color: #fafafa;
+    background-color: #f8f9fa;
 }
 
 .message {
@@ -159,40 +185,32 @@ button:hover {
 }
 
 .message.assistant {
-    background-color: #f1f1f1;
+    background-color: #f5f5f5;
     margin-right: 20%;
 }
 
 .message-header {
     font-weight: bold;
     margin-bottom: 5px;
-    color: #2c3e50;
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
-/* 隐藏元素样式 */
 .hidden {
     display: none;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-    
-    header h1 {
-        font-size: 2rem;
-    }
-    
-    .card {
-        padding: 15px;
-    }
-    
-    .message.user {
-        margin-left: 10%;
-    }
-    
-    .message.assistant {
-        margin-right: 10%;
-    }
+.submit-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
 }
