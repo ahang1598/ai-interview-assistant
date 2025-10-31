@@ -10,7 +10,7 @@ from ..utils.resume_parser import parse_resume
 from ..models.user import User
 from ..api.auth import get_current_active_user
 
-router = APIRouter(prefix="/knowledge")
+router = APIRouter()
 
 class DocumentAddRequest(BaseModel):
     documents: List[str]

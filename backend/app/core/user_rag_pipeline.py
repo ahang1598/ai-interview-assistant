@@ -1,4 +1,4 @@
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import Qdrant
 try:
     from langchain_community.embeddings import HuggingFaceEmbeddings
     SENTENCE_TRANSFORMERS_AVAILABLE = True
@@ -12,6 +12,7 @@ from langchain.prompts import PromptTemplate
 from typing import List, Dict, Any
 import os
 import warnings
+from qdrant_client import QdrantClient
 
 
 class UserRAGPipeline:
@@ -50,14 +51,17 @@ class UserRAGPipeline:
             self.embedding_model = FakeEmbeddings(size=1024)
 
         # 初始化用户专属向量数据库
-        persist_directory = f"./chroma_db/user_{user_id}"
         try:
-            self.vectorstore = Chroma(
-                persist_directory=persist_directory,
-                embedding_function=self.embedding_model
+            qdrant_host = os.getenv("QDRANT_HOST", "localhost")
+            qdrant_port = int(os.getenv("QDRANT_PORT", "6333"))
+            client = QdrantClient(host=qdrant_host, port=qdrant_port)
+            self.vectorstore = Qdrant(
+                client=client,
+                collection_name=f"user_{user_id}_knowledge",
+                embeddings=self.embedding_model,
             )
         except Exception as e:
-            warnings.warn(f"无法初始化向量数据库: {e}")
+            warnings.warn(f"无法初始化Qdrant向量数据库: {e}")
             # 创建一个空的向量存储作为后备
             self.vectorstore = None
 
@@ -173,4 +177,4 @@ class UserRAGPipeline:
         if self.vectorstore is None:
             warnings.warn("向量数据库未初始化，无法删除集合")
             return
-        self.vectorstore.delete_collection()
+        # Qdrant不需要显式删除集合，当需要清空时可以过滤查询

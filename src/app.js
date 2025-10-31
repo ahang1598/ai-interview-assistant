@@ -20,8 +20,10 @@ const userInput = document.getElementById('user-input');
 // 简历数据
 let resumeData = null;
 
-// 检查用户是否已登录
-checkAuthStatus();
+// 页面加载完成后检查认证状态
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuthStatus();
+});
 
 // 事件监听器
 loginLink.addEventListener('click', () => {

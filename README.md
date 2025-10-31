@@ -13,7 +13,7 @@ AI面试助手是一个基于人工智能的面试辅助工具，帮助求职者
 
 - 后端：FastAPI + LangChain + Qwen大模型
 - 前端：React/Vue + Vite
-- 数据库：MySQL (用户数据) + ChromaDB (向量数据)
+- 数据库：MySQL (用户数据) + Qdrant (向量数据)
 - 部署：Docker容器化部署
 
 ## 快速开始

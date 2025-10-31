@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询历史 - AI面试助手</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI面试助手</h1>
+            <p>查询历史</p>
+            <div id="user-info" class="user-info">
+                <span id="username"></span>
+                <a href="profile.html" class="profile-link">个人资料</a>
+                <button id="logout-btn">退出</button>
+            </div>
+        </header>
+
+        <main>
+            <section class="card">
+                <div class="header-row">
+                    <h2 id="kb-title">知识库查询历史</h2>
+                    <button id="back-btn" class="submit-btn">返回知识库</button>
+                </div>
+                <div id="history-list">
+                    <p>加载中...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="history.js"></script>
+</body>
+</html>

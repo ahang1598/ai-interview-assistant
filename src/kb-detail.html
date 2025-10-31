@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库详情 - AI面试助手</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI面试助手</h1>
+            <p>知识库详情</p>
+            <div id="user-info" class="user-info">
+                <span id="username"></span>
+                <a href="index.html" class="profile-link">首页</a>
+                <a href="knowledge.html" class="profile-link">知识库管理</a>
+                <a href="profile.html" class="profile-link">个人资料</a>
+                <button id="logout-btn">退出</button>
+            </div>
+        </header>
+
+        <main>
+            <section class="card">
+                <div class="header-row">
+                    <h2 id="kb-title">知识库详情</h2>
+                    <div>
+                        <button id="history-btn" class="submit-btn">查看历史记录</button>
+                        <button onclick="goBack()" class="submit-btn">返回</button>
+                    </div>
+                </div>
+                <div id="kb-info">
+                    <p>加载中...</p>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>添加文档</h2>
+                <div class="tab-container">
+                    <div class="tabs">
+                        <button id="text-tab" class="tab active">文本内容</button>
+                        <button id="resume-tab" class="tab">简历文件</button>
+                    </div>
+                    
+                    <div id="text-content" class="tab-content">
+                        <form id="add-text-form" class="auth-form">
+                            <div class="form-group">
+                                <label for="document-text">文档内容</label>
+                                <textarea id="document-text" rows="6" required placeholder="输入要添加到知识库的文本内容"></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">添加到知识库</button>
+                            <div id="add-text-message" class="message"></div>
+                        </form>
+                    </div>
+                    
+                    <div id="resume-content" class="tab-content hidden">
+                        <form id="add-resume-form" class="auth-form">
+                            <div class="form-group">
+                                <label for="resume-file">选择简历文件</label>
+                                <input type="file" id="resume-file" accept=".pdf,.docx" required>
+                            </div>
+                            <button type="submit" class="submit-btn">从简历添加</button>
+                            <div id="add-resume-message" class="message"></div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>知识库问答</h2>
+                <form id="query-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="query-question">问题</label>
+                        <input type="text" id="query-question" required placeholder="请输入您的问题">
+                    </div>
+                    <button type="submit" class="submit-btn">查询知识库</button>
+                </form>
+                
+                <div id="query-results" class="query-results hidden">
+                    <h3>回答:</h3>
+                    <div id="answer-content" class="answer-content"></div>
+                    
+                    <h3>参考文档:</h3>
+                    <div id="source-documents" class="source-documents"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="kb-detail.js"></script>
+</body>
+</html>

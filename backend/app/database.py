@@ -7,19 +7,16 @@ from dotenv import load_dotenv
 # 加载环境变量
 load_dotenv()
 
-# 数据库配置
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./users.db")
+# 从环境变量获取数据库URL，默认使用MySQL
+DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://ahang:Ahang%40123@172.30.153.10:3306/interview")
 
-# MySQL数据库配置示例:
-# SQLALCHEMY_DATABASE_URL = "mysql+pymysql://user:password@localhost:3306/dbname"
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+# 创建引擎，移除SQLite特有的connect_args参数
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
 def get_db():
-    """Dependency to get a database session"""
     db = SessionLocal()
     try:
         yield db
